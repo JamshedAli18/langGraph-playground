@@ -39,12 +39,12 @@ def chatbot(state: AgentState) -> AgentState:
     return {"messages": [{"role": "assistant", "content": response}]}
 
 
-def create_simple_agent() -> StateGraph:
+def create_simple_agent():
     """
     Creates and configures a simple agent graph.
     
     Returns:
-        Configured StateGraph representing the agent
+        Compiled graph representing the agent
     """
     # Create the graph
     workflow = StateGraph(AgentState)
