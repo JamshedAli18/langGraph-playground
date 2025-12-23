@@ -48,7 +48,8 @@ def display_results(state: State) -> State:
     """Display final results from all parallel processes"""
     print("\n  All parallel processes completed!")
     print(f"  Collected {len(state['results'])} results")
-    # Return empty dict to not modify state
+    # Return empty dict to avoid modifying state further
+    # All processing is already done, this node is just for display
     return {}
 
 
