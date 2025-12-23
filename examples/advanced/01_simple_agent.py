@@ -46,7 +46,7 @@ def calculator_tool(expression: str) -> str:
         if not all(c in allowed_chars for c in expression):
             return "Error: Invalid characters in expression"
         
-        # Use ast.literal_eval for safer evaluation of simple expressions
+        # Use AST for safer evaluation of simple expressions
         # Note: This is still limited; for production use a proper math parser
         import ast
         import operator
@@ -56,7 +56,9 @@ def calculator_tool(expression: str) -> str:
             ast.Add: operator.add,
             ast.Sub: operator.sub,
             ast.Mult: operator.mul,
-            ast.Div: operator.truediv
+            ast.Div: operator.truediv,
+            ast.UAdd: operator.pos,
+            ast.USub: operator.neg
         }
         
         def eval_expr(node):
@@ -122,9 +124,16 @@ def use_tool(state: AgentState) -> dict:
     question = state["question"]
     
     if action == "calculator":
-        # Extract expression from question (simplified)
-        # In reality, LLM would extract this
-        observation = calculator_tool("10 + 5")
+        # Extract numbers and operators from question for demonstration
+        # In a real implementation, an LLM would extract the expression
+        import re
+        # Look for mathematical expressions in the question
+        expression = re.search(r'[\d\s+\-*/()]+', question)
+        if expression:
+            calc_input = expression.group().strip()
+        else:
+            calc_input = "10 + 5"  # Fallback example
+        observation = calculator_tool(calc_input)
     elif action == "search":
         observation = search_tool(question)
     else:
