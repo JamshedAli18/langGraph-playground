@@ -31,12 +31,48 @@ class AgentState(TypedDict):
 
 # Simulated tools
 def calculator_tool(expression: str) -> str:
-    """Simple calculator tool."""
+    """Simple calculator tool.
+    
+    Note: In a production environment, use a proper math parser
+    or library like 'numexpr' or 'simpleeval' for safe evaluation.
+    """
+    # For demonstration, we'll handle simple operations safely
     try:
-        result = eval(expression)
+        # Remove whitespace
+        expression = expression.strip()
+        
+        # Basic validation - only allow numbers and basic operators
+        allowed_chars = set('0123456789+-*/(). ')
+        if not all(c in allowed_chars for c in expression):
+            return "Error: Invalid characters in expression"
+        
+        # Use ast.literal_eval for safer evaluation of simple expressions
+        # Note: This is still limited; for production use a proper math parser
+        import ast
+        import operator
+        
+        # Simple expression parser for basic operations
+        operators = {
+            ast.Add: operator.add,
+            ast.Sub: operator.sub,
+            ast.Mult: operator.mul,
+            ast.Div: operator.truediv
+        }
+        
+        def eval_expr(node):
+            if isinstance(node, ast.Constant):  # <number>
+                return node.value
+            elif isinstance(node, ast.BinOp):  # <left> <operator> <right>
+                return operators[type(node.op)](eval_expr(node.left), eval_expr(node.right))
+            elif isinstance(node, ast.UnaryOp):  # <operator> <operand>
+                return operators[type(node.op)](eval_expr(node.operand))
+            else:
+                raise TypeError(node)
+        
+        result = eval_expr(ast.parse(expression, mode='eval').body)
         return f"Result: {result}"
     except Exception as e:
-        return f"Error: {str(e)}"
+        return f"Error: Could not evaluate expression. {str(e)}"
 
 
 def search_tool(query: str) -> str:
