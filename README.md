@@ -39,6 +39,16 @@ Run the simple agent example:
 python simple_agent.py
 ```
 
+Run the advanced example with batch and interactive modes:
+```bash
+python example.py
+```
+
+Run the tests:
+```bash
+python -m unittest test_simple_agent
+```
+
 You can also import and use the agent in your own code:
 ```python
 from simple_agent import run_simple_agent, create_simple_agent
@@ -58,6 +68,8 @@ print(result["messages"][-1].content)
 - **Simple State Management**: Uses LangGraph's StateGraph for managing conversation state
 - **Message Handling**: Leverages LangGraph's message annotation system
 - **Easy to Extend**: Built as a foundation for more complex agent implementations
+- **Interactive Mode**: Example includes both batch and interactive conversation modes
+- **Comprehensive Tests**: Includes unit tests for all major functionality
 
 ## Requirements
 
